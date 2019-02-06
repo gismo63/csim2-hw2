@@ -8,8 +8,8 @@ def LU_solve(A,b):#The function takes a matrix A and a vector b and returns the 
     size = min(A.shape) #the number of rows in the matrix
     rows = A.shape[0]
     cols = A.shape[1]
-    while c<(size-1): #iterate through all rows
-        if A[r][r]!=0: #check if the pivot is non-zero
+    while c<(cols): #iterate through all rows
+        if A[r][c]!=0: #check if the pivot is non-zero
             for i in range(r+1,rows): #if it is non zero create L matrices for the column
                 if A[i][r]!=0:
                     L_c = L_mat(r,i,rows,A[i][c]/A[r][c]) #this function calculates the L matrix for A[i][r]
@@ -17,35 +17,36 @@ def LU_solve(A,b):#The function takes a matrix A and a vector b and returns the 
                     b = np.dot(L_c,b) #apply the row operation to b
             r+=1 #move on to next row
             c+=1
+            print (c)
         else: #if there is no pivot need to permute rows
-            ind = first_nonzero(A[:,c],r,size) #this function returns the index of the first non-zero entry below the pivot in that column
+            ind = first_nonzero(A[:,c],r,rows) #this function returns the index of the first non-zero entry below the pivot in that column
+            print (ind)
             if ind == -1: #if there is no non-zero entry then the matrix is singular
                 c+=1
             else:
-                P = perm_mat(ind,r,size)# this function calculates the permutation matrix to swap row r with the first row below with non-zero pivot
-
+                P = perm_mat(ind,r,rows)# this function calculates the permutation matrix to swap row r with the first row below with non-zero pivot
                 A = np.dot(P,A) #apply the permutation the A
                 b = np.dot(P,b) #apply the permutation the b
     #if abs(A[size-1][size-1])<10.0**(-10):#the final pivot of a singular matrix can often be non-zero due to rounding errors so if the final pivot is small enough claim that the matrix is singular
         #return ("unavoidable zero pivot")
-    print (A)
-    x = back_subs(A,b,size)# solve Ux=c by back substitution
-    return x
+    #x= back_subs(A,b,size)# solve Ux=c by back substitution
+    #return x
+    return A
 
 
-def L_mat(r,i,size,factor): #this creates the L matrix for the gi
-    L = np.eye(size)
+def L_mat(r,i,rows,factor): #this creates the L matrix for the gi
+    L = np.eye(rows)
     L[i][r] =  -factor
     return L
 
-def first_nonzero(col,r,size): #finds the first non-zero entry below the pivot
-    for i in range(r,size):
+def first_nonzero(col,r,rows): #finds the first non-zero entry below the pivot
+    for i in range(r,rows):
         if col[i]!=0:
             return i
     return -1 #if there is no non-zero entry return -1
 
-def perm_mat(i,r,size): #this creates the permuation matrix to swap rows i and j
-    P = np.eye(size)
+def perm_mat(i,r,rows): #this creates the permuation matrix to swap rows i and j
+    P = np.eye(rows)
     P[i][i] = 0
     P[r][r] = 0
     P[r][i] = 1
