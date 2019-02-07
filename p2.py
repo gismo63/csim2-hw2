@@ -68,8 +68,9 @@ def back_subs(U,b,size): #solves Ux=b for x by backward substitution
 
 
 
+
 A3 = np.array([[3.,6.,-3.,2.],[2.,5.,0.,4.],[3.,9.,3.,-1.],[1.,2.,-1.,1.]])
-b3 = np.array([3.,1.,-3.,2.])
+b3 = np.array([3.,1.,-3.,12./11])
 
 
 if np.linalg.matrix_rank(A3) == len(A3):
@@ -79,6 +80,9 @@ else:
     combined[:,:-1] = A3
     combined[:,-1] = b3
     if np.linalg.matrix_rank(combined) == np.linalg.matrix_rank(A3):
-        print ("Infinitely many solutions")
+        print ("Infinitely Many Solutions, example:")
+        print (np.linalg.lstsq(A3,b3,rcond=None)[0])
     else:
         print ("No solutions")
+        print ("Least Squares")
+        print (np.linalg.lstsq(A3,b3,rcond=None)[0])

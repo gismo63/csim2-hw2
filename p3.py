@@ -14,7 +14,7 @@ def null_col(A):#The function takes a matrix A and a vector b and returns the ve
     while c<(cols): #iterate through all rows
         if A[r][c]!=0: #check if the pivot is non-zero
             for i in range(r+1,rows): #if it is non zero create L matrices for the column
-                if A[i][r]!=0:
+                if A[i][c]!=0:
                     L_c = L_mat(r,i,rows,A[i][c]/A[r][c]) #this function calculates the L matrix for A[i][r]
                     A = np.dot(L_c,A) #apply the row operation to A
             pivots.append(c)
